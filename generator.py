@@ -31,8 +31,11 @@ import lstm
 ''' Helper function to sample an index from a probability array '''
 def __sample(a, temperature=1.0):
     a = np.log(a) / temperature
-    a = np.exp(a) / np.sum(np.exp(a))
-    return np.argmax(np.random.multinomial(1, a, 1))
+    # a = np.exp(a) / np.sum(np.exp(a))
+    # return np.argmax(np.random.multinomial(1, a, 1))
+    dist = np.exp(a)/np.sum(np.exp(a))
+    choices = range(len(a))
+    return np.random.choice(choices, p=dist)
 
 ''' Helper function to generate a predicted value from a given matrix '''
 def __predict(model, x, indices_val, diversity):
@@ -94,14 +97,11 @@ def __generate_grammar(model, corpus, abstract_grammars, values, val_indices,
 #----------------------------PUBLIC FUNCTIONS----------------------------------#
 ''' Generates musical sequence based on the given data filename and settings.
     Plays then stores (MIDI file) the generated output. '''
-def generate(data_fn, out_fn, N_epochs):
+def generate(data_fn, out_fn, N_epochs, bpm):
     # model settings
     max_len = 20
     max_tries = 1000
     diversity = 0.5
-
-    # musical settings
-    bpm = 130
 
     # get data
     chords, abstract_grammars = get_musical_data(data_fn)
@@ -162,8 +162,8 @@ def generate(data_fn, out_fn, N_epochs):
     out_stream.insert(0.0, tempo.MetronomeMark(number=bpm))
 
     # Play the final stream through output (see 'play' lambda function above)
-    play = lambda x: midi.realtime.StreamPlayer(x).play()
-    play(out_stream)
+    # play = lambda x: midi.realtime.StreamPlayer(x).play()
+    # play(out_stream)
 
     # save stream
     mf = midi.translate.streamToMidiFile(out_stream)
@@ -185,7 +185,10 @@ def main(args):
     if (N_epochs == 1): out_fn += '_epoch.midi'
     else:               out_fn += '_epochs.midi'
 
-    generate(data_fn, out_fn, N_epochs)
+    # musical settings
+    bpm = 130
+
+    generate(data_fn, out_fn, N_epochs, bpm)
 
 ''' If run as script, execute main '''
 if __name__ == '__main__':

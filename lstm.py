@@ -39,15 +39,15 @@ def build_model(corpus, val_indices, max_len, N_epochs=128):
 
     # build a 2 stacked LSTM
     model = Sequential()
-    model.add(LSTM(128, return_sequences=True, input_shape=(max_len, N_values)))
+    model.add(LSTM(64, return_sequences=True, input_shape=(max_len, N_values)))
     model.add(Dropout(0.2))
-    model.add(LSTM(128, return_sequences=False))
+    model.add(LSTM(64, return_sequences=False))
     model.add(Dropout(0.2))
     model.add(Dense(N_values))
     model.add(Activation('softmax'))
 
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
 
-    model.fit(X, y, batch_size=128, nb_epoch=N_epochs)
+    model.fit(X, y, batch_size=64, nb_epoch=N_epochs)
 
     return model
