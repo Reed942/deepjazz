@@ -21,6 +21,6 @@ from django.views.static import serve
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url('render/', aicompositionrequest),
+    url('render', aicompositionrequest),
     url(r'^audio/(?P<path>.*)', serve, {"document_root": settings.AUDIO_ROOT})
 ]

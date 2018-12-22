@@ -148,8 +148,8 @@ def generate(data_fn, out_fn, N_epochs, bpm):
         curr_notes = clean_up_notes(curr_notes)
 
         # print # of notes in curr_notes
-        print('After pruning: %s notes' % (len([i for i in curr_notes
-            if isinstance(i, note.Note)])))
+        # print('After pruning: %s notes' % (len([i for i in curr_notes
+        #     if isinstance(i, note.Note)])))
 
         # insert into the output stream
         for m in curr_notes:
